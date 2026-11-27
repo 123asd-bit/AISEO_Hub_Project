@@ -9,6 +9,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+document.addEventListener("click", e => {
+  const link = e.target.closest("a[data-outbound-citation]");
+  if (!link) return;
+  if (typeof window.gtag === "function") {
+    window.gtag("event", "outbound_citation_click", {
+      link_label: link.dataset.outboundCitation || link.textContent.trim(),
+      link_url: link.href,
+      transport_type: "beacon"
+    });
+  }
+});
+
 function showResults(container, title, items) {
   container.style.display = "block";
   container.innerHTML = `<h2>${escapeHtml(title)}</h2><ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul><div class="result-actions"><button class="mini-button" type="button" onclick="copyResults(this)">Copy results</button></div>`;
